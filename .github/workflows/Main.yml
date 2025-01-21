@@ -37,7 +37,7 @@ jobs:
     needs:
       - check
 
-  build_x86:
+  build:
     uses: ./.github/workflows/build-workflow.yml
     with:
       run_platform: ${{ matrix.platform }}

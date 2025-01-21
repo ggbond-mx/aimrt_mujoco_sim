@@ -1,7 +1,6 @@
 #!/bin/bash
 
-clang_format_version=$(clang-format-15 --version 2>&1)
-echo $clang_format_version
+clang_format_version=$(clang-format --version 2>&1)
 
 if [[ $clang_format_version == *"version 15"* ]]; then
     echo "use clang-format-15"

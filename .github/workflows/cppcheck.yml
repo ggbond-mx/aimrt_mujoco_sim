@@ -26,7 +26,8 @@ jobs:
             sudo add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-15 main"
             sudo apt-get update
             sudo apt purge clang-format-14 -y
-            sudo apt-get install cppcheck git cmake-format  clang-format-15 python3-autopep8 -y
+            sudo apt-get install cppcheck git cmake-format-15 python3-autopep8 -y
+            sudo ln -sf $(which cmake-format-15) /usr/local/bin/cmake-format
 
       - name: generate cppcheck.sh
         run: |
