@@ -27,7 +27,6 @@ jobs:
             sudo apt-get update
             sudo apt-get install cppcheck git clang-format-15 cmake-format python3-autopep8 -y
 
-
       - name: generate cppcheck.sh
         run: |
             echo "generate /tmp/cppcheck.sh ..."
