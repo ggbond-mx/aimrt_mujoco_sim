@@ -22,7 +22,7 @@ jobs:
 
       - name: Set up ROS 2
         run:
-             apt-get install cppcheck git -y
+            sudo apt-get install cppcheck git -y
 
 
       - name: generate cppcheck.sh
