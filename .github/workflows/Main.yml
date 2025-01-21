@@ -1,0 +1,52 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    # 指定官方 runner
+    runs-on: ubuntu-22.04    # 可选择的官方 runner
+    container:
+      image: ubuntu:jammy
+
+    steps:
+      - name: Run a test
+        uses: actions/checkout@v3
+
+      - name: Setup cmake
+        uses: jwlawson/actions-setup-cmake@v2
+        with:
+          cmake-version: '3.28.x'
+
+      - name: Use cmake
+        run: cmake --version
+
+      - name: Set up ROS 2
+        uses: ros-tooling/setup-ros@v0.7
+        with:
+          required-ros-distributions: humble
+
+      - name: set up rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Install dependencies for build
+        run: |
+          sudo apt install libacl1-dev curl libssl-dev -y
+
+      - name: start test
+        run: |
+          source /opt/ros/humble/setup.bash
+          ./test.sh
+
+      - name: start build
+        shell: bash
+        run: |
+          source /opt/ros/humble/setup.bash
+          ./build.sh
+
