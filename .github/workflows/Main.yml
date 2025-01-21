@@ -16,11 +16,11 @@ on:
     types: [published]
 
 jobs:
-  # check:
-  #   uses: ./.github/workflows/cppcheck.yml
-  #   with:
-  #     image_name: ubuntu
-  #   secrets: inherit
+  check:
+    uses: ./.github/workflows/cppcheck.yml
+    with:
+      platform: ubuntu-22.04
+    secrets: inherit
 
   test:
     uses: ./.github/workflows/test-workflow.yml
@@ -34,6 +34,8 @@ jobs:
             image: ubuntu:jammy
           - platform: ubuntu-22.04-arm
             image: ubuntu:jammy
+    needs:
+      - check
 
   build_x86:
     uses: ./.github/workflows/build-workflow.yml
@@ -47,6 +49,8 @@ jobs:
             image: ubuntu:jammy
           - platform: ubuntu-22.04-arm
             image: ubuntu:jammy
+    needs:
+      - test
 
 
 

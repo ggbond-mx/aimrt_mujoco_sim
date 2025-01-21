@@ -3,14 +3,10 @@ name: check Workflow
 on:
   workflow_call:
     inputs:
-      image_name:
+      platform:
         required: true
         type: string
         default: ubuntu
-      image_tag:
-        required: false
-        type: string
-        default: latest
 
 jobs:
   check:
@@ -19,10 +15,16 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: set up python
+        uses: actions/setup-python@v4
+        with:
+            python-version: '3.10'
+            cache: 'pip'
 
-      - name: Get short sha
-        id: slug
-        run: echo "sha8=$(echo ${GITHUB_SHA} | cut -c1-8)" >> $GITHUB_OUTPUT
+      - name: Set up ROS 2
+        run:
+             apt-get install cppcheck git -y
+
 
       - name: generate cppcheck.sh
         run: |

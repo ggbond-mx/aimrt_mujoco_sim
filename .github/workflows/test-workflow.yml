@@ -28,7 +28,7 @@ jobs:
 
       - name: download and Use cmake
         run: |
-          pip install cmake --upgrade
+          pip install cmake==3.28.0
           cmake --version
 
       - name: set up rust
