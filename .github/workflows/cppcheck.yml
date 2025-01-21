@@ -14,17 +14,10 @@ on:
 
 jobs:
   check:
-    runs-on: amd64
-    container:
-      image: ${{ inputs.image_name }}:${{ inputs.image_tag }}
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        env:
-          https_proxy: ${{ secrets.https_proxy }}
-          http_proxy: ${{ secrets.http_proxy }}
-        with:
-          ref: ${{ github.event.pull_request.head.sha }}
 
 
       - name: Get short sha
@@ -74,43 +67,7 @@ jobs:
                 echo "cppcheck failed"
                 exit -1
             fi
-            echo "github.sha is : ${{ github.sha }}"
-            echo "short_sha is : ${{ steps.slug.outputs.sha8 }}"
 
-            # 生成报告并提交到指定http文件服务器上
-            if [ -n "${{secrets.CPPCHECK_REPORT_POST_URL}}" ]; then
-                check_report_dir=${{ github.repository }}/${{ github.ref_name }}/${{ steps.slug.outputs.sha8 }}
-                mkdir -p \$check_report_dir
-                echo "github.repository_owner is : ${{ github.repository_owner }}"
-                echo "github.repository.name is : ${{ github.repository }}"
-                echo "github.ref_name is : ${{ github.ref_name }}"
-                echo "steps.slug.outputs.sha8 is : ${{ steps.slug.outputs.sha8 }}"
-                echo "check_report_dir is : \$check_report_dir"
-
-                cppcheck-htmlreport --file=/tmp/cppcheck.xml --title=CSA --report-dir=\$check_report_dir --source-dir=./
-                echo "check_report_dir is : \$check_report_dir"
-
-
-                # zip 压缩 \$check_report_dir
-                zip -r \${{ steps.slug.outputs.sha8 }}.zip \$check_report_dir
-                curl -F file=@${{ steps.slug.outputs.sha8 }}.zip -F unzip=true \${{secrets.CPPCHECK_REPORT_POST_URL}}
-
-                # 判断推送是否成功
-                if [ \$? -ne 0 ]; then
-                    echo "cppcheck report push failed"
-                    exit -1
-                fi
-
-                # 删除临时文件
-                rm -rf \$check_report_dir
-                rm -rf \${{ steps.slug.outputs.sha8 }}.zip
-
-                # 打印报告地址
-                # echo "cppcheck report url: ${{secrets.CPPCHECK_REPORT_POST_URL}}/\$check_report_dir/index.html"
-                echo -e "\\033[1;35m cppcheck report url: ${{secrets.CPPCHECK_REPORT_URL}}/\$check_report_dir/index.html \\033[0m"
-            fi
-
-            EOF
       - name: generate cppcheck_analyze.py
         run: |
             echo "generate /tmp/cppcheck_analyze.py ..."
