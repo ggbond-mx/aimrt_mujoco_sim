@@ -21,18 +21,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup cmake
-        uses: jwlawson/actions-setup-cmake@v2
-        with:
-          cmake-version: '3.28.x'
-
-      - name: Use cmake
-        run: cmake --version
-
       - name: Set up ROS 2
         uses: ros-tooling/setup-ros@v0.7
         with:
           required-ros-distributions: humble
+
+      - name: download and Use cmake
+        run: |
+          pip install cmake --upgrade
+          cmake --version
 
       - name: set up rust
         uses: actions-rs/toolchain@v1
