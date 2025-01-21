@@ -25,7 +25,7 @@ jobs:
             wget -O- https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
             sudo add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-15 main"
             sudo apt-get update
-            sudo apt purge clang-format -y
+            sudo apt purge clang-format-14 -y
             sudo apt-get install cppcheck git cmake-format  clang-format-15 python3-autopep8 -y
 
       - name: generate cppcheck.sh
