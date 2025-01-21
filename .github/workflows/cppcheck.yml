@@ -27,6 +27,7 @@ jobs:
             sudo apt-get update
             sudo apt purge clang-format-14 -y
             sudo apt-get install cppcheck git clang-format-15  python3-autopep8 -y
+            sudo ln -sf $(which clang-format-15) /usr/local/bin/clang-format
 
       - name: generate cppcheck.sh
         run: |
